@@ -21,6 +21,6 @@ CMDARG="-v OPENBMC_HOST:$BMCHOST \
         -v OS_PASSWORD:$OSPASSWORD \
         "
 
-robot -L debug  $CMDARG server/status.robot
-
+# robot -L debug  $CMDARG server/status.robot
+robot -L debug  $CMDARG server/test.robot
 

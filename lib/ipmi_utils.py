@@ -16,7 +16,7 @@ import ipmi_client as ic
 import tempfile
 gru.my_import_resource("ipmi_client.robot")
 from robot.libraries.BuiltIn import BuiltIn
-
+from robot.api import logger
 
 def get_sol_info():
     r"""
@@ -236,6 +236,26 @@ def get_ipmi_power_reading(strip_watts=1):
 
     return result
 
+
+def get_bmc_firmware_info():
+    status, ret_values = \
+        grk.run_key_u("Run IPMI Standard Command  mc info")
+    ret = vf.key_value_outbuf_to_dict(ret_values, process_indent=1)
+
+    # logger.console(ret)
+    result = ret.get("firmware_revision")
+    # logger.console(result)
+
+    firmrevinfo = list(map(str, ret.get("aux_firmware_rev_info")))
+    # logger.console(int(firmrevinfo[0],16))
+    firmrev = int(firmrevinfo[0],16) + \
+              int(firmrevinfo[1],16) * 256 +  \
+              int(firmrevinfo[2],16) * 256 * 256 + \
+              int(firmrevinfo[3],16) * 356 * 256 * 256
+    # result = ret
+    result = "%s.%d" % (result, firmrev)
+  
+    return result
 
 def get_mc_info():
     r"""
