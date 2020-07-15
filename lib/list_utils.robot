@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation  This module contains keywords for list manipulation.
 Library  Collections
+Library  Process
 
 *** Keywords ***
 Smart Combine Lists

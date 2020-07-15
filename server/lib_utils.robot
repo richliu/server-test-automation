@@ -2,7 +2,31 @@
 Resource                ../lib/utils.robot
 
 
+*** Variables ***
+${ipmiprecmd}=  -U ${OPENBMC_USERNAME} -P ${OPENBMC_PASSWORD} -H ${OPENBMC_HOST} -I lanplus
+
+
 *** Keywords ***
+
+Check Power On Status
+    [Documentation]  Get Host Power Status
+
+    ${ret}=  Run IPMI CMD  ${ipmiprecmd} power status
+    # Log To Console  ${ret}
+    Should Be Equal As Strings  ${ret}  Chassis Power is on
+    # Should Be End With on  
+
+
+Run IPMI CMD
+    [Documentation]  Run the IPMI command and return the output.
+    [Arguments]    ${args}
+
+    ${rc}  ${stdout}=  Run And Return Rc And Output  ipmitool ${ipmiprecmd} ${args} 
+    # Log To Console  ${stdout}
+    # Log To Console  ${rc}
+    Should Be Equal As Integers  ${rc}  0  msg=${stdout}
+    [Return]    ${stdout}
+
 
 Verify Ping 
     [Documentation]  Verify ping and rest authentication.
